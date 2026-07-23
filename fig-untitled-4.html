@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>已售出</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700<style>family=Bricolage+Grotesque:opsz,wght@12..96,800<style>family=Nunito:wght@400;600;700;800<style>display=swap" rel="stylesheet">
+<style>
+:root{--canvas:#FFF9F8;--canvas-soft:#FFF2EE;--ink:#4A3A3E;--body:#6B5A5E;--body-mid:#9A8A8E;--mute:#E8D5D0;--primary:#FF9CB5;--primary-dark:#E87A95;--on-primary:#FFFEFB;--radius-sm:10px;--radius-md:18px;--radius-pill:9999px;--font:"Quicksand","Nunito",sans-serif;--font-heading:"Bricolage Grotesque","Nunito",sans-serif;--shadow:0 4px 16px rgba(255,156,181,.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#FFF5F2}
+body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--canvas);position:relative;overflow:hidden}
+.app-blob{position:absolute;border-radius:9999px;pointer-events:none;z-index:0}
+.app-blob.b1{width:280px;height:280px;top:-80px;right:-60px;background:#FFD1DC;opacity:.35;filter:blur(80px)}
+.app-blob.b2{width:320px;height:320px;bottom:-100px;left:-80px;background:#FCD5CE;opacity:.25;filter:blur(90px)}
+.page-header{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:4px 16px 10px}
+.page-header .back-btn{width:34px;height:34px;border-radius:50%;background:var(--canvas-soft);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--body);font-weight:700;transition:background .15s;flex-shrink:0}
+.page-header .back-btn:active{background:var(--mute)}
+.page-header h1{font-size:20px;font-weight:800;color:var(--primary-dark);font-family:var(--font-heading)}
+.content{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 16px 8px;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--mute);border-radius:4px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:14px}
+.stat-card{background:var(--canvas);border-radius:var(--radius-md);padding:12px;text-align:center;box-shadow:var(--shadow);border:1.5px solid rgba(255,156,181,.1)}
+.stat-card .stat-value{font-size:20px;font-weight:800;color:var(--ink);line-height:1.2;font-family:var(--font-heading)}
+.stat-card .stat-label{font-size:13px;font-weight:600;color:var(--body-mid);margin-bottom:2px}
+.stat-card .stat-value.green{color:#2a9d8f}
+.sold-table{width:100%;border-collapse:collapse}
+.sold-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:700;color:var(--ink);background:var(--canvas-soft);border-bottom:1.5px solid var(--mute)}
+.sold-table td{padding:8px 10px;font-size:12px;border-bottom:1px solid var(--canvas-soft);font-weight:600}
+.sold-table tr:active td{background:var(--canvas-soft)}
+.sold-table .profit{color:#2a9d8f;font-weight:700}
+.sold-table .loss{color:#E87A7A;font-weight:700}
+.empty-state{text-align:center;padding:40px 20px;color:var(--body-mid);font-size:14px}
+.empty-state .empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.tab-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);background:var(--canvas);border-top:1.5px solid var(--canvas-soft);flex-shrink:0}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;border:none;background:none;cursor:pointer;font-family:inherit;transition:opacity .12s;position:relative}
+.tab-item:active{opacity:.6}
+.tab-item .tab-icon{font-size:20px;line-height:1;font-weight:800;color:var(--body-mid);transition:color .15s}
+.tab-item .tab-label{font-size:10px;color:var(--body-mid);font-weight:700;transition:color .15s}
+.tab-item.active .tab-icon{color:var(--primary-dark)}
+.tab-item.active .tab-label{color:var(--primary-dark)}
+.tab-item .tab-active-face{position:absolute;top:-14px;font-size:8px;color:var(--primary);opacity:0;transition:opacity .15s;pointer-events:none}
+.tab-item.active .tab-active-face{opacity:.6}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(74,58,62,.35);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--canvas);border-radius:var(--radius-md);padding:20px;max-width:380px;width:100%;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:12px;font-family:var(--font-heading)}
+.modal p{font-size:13px;color:var(--body);margin-bottom:12px}
+.modal-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:14px}
+.modal-actions .btn-text{background:none;color:var(--body);padding:8px 14px;font-weight:700;border-radius:var(--radius-md);cursor:pointer;border:none;font-family:inherit;font-size:13px}
+.modal-actions .btn-red{background:#E87A7A;color:white;padding:8px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;box-shadow:0 4px 12px rgba(232,122,122,.25)}
+.modal-actions .btn-red:active{transform:scale(.96)}
+@media(min-width:481px){.app{border-radius:28px;margin:20px auto;height:calc(100dvh - 40px);box-shadow:0 0 40px rgba(0,0,0,.06)}}
+</style></head><body>
+<div class="app"><div class="app-blob b1"></div><div class="app-blob b2"></div>
+<div class="page-header"><h1>已售出</h1></div>
+<div class="content" style="flex:1;overflow-y:auto;min-height:0">
+<div id="pageSold"></div>
+<div id="pageDetail" style="display:none"></div></div>
+<nav class="tab-bar">
+<button class="tab-item" onclick="window.location.href='fig-untitled.html'"><span class="tab-icon"><img src="assets/emoji/crop_16.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">主页</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-1.html'"><span class="tab-icon"><img src="assets/emoji/crop_18.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">柜子</span></button>
+<button class="tab-item active" onclick="window.location.href='fig-untitled-4.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_19.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">已售</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-icon"><img src="assets/emoji/crop_20.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+<script>
+var D={cabinets:[],books:[],soldBooks:[]};
+function sv(){try{localStorage.setItem('z2_sold',JSON.stringify(D.soldBooks));}catch(e){}}
+function ld(){try{D.cabinets=JSON.parse(localStorage.getItem('z2_cabs'))||[];}catch(e){}try{D.soldBooks=JSON.parse(localStorage.getItem('z2_sold'))||[];}catch(e){}}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function cabName(id){var c=D.cabinets.find(function(x){return x.id===id;});return c?c.name:'-';}
+function fmt(n){return (n==null||isNaN(n))?'0.00':Number(n).toFixed(2);}
+
+function renderList(){
+  var el=document.getElementById('pageSold');document.getElementById('pageDetail').style.display='none';document.getElementById('pageSold').style.display='';
+  var bks=D.soldBooks; var tp=bks.reduce(function(s,b){return s+(b.profit||0);},0); var ts=bks.reduce(function(s,b){return s+(b.sp||0);},0);
+  var tq=bks.reduce(function(s,b){return s+(b.qty||1);},0);
+  var h='<div class="stats-row"><div class="stat-card"><div class="stat-label">已售数量</div><div class="stat-value">'+tq+'</div></div><div class="stat-card"><div class="stat-label">售出总额</div><div class="stat-value">'+Math.round(ts)+'</div></div><div class="stat-card"><div class="stat-value '+(tp>=0?'green':'')+'">'+(tp>=0?'+':'')+Math.round(tp)+'</div><div class="stat-label">总利润</div></div></div>';
+  if(bks.length===0){h+='<div class="empty-state"><div class="empty-icon">&#128176;</div><p>还没有售出记录</p></div>';el.innerHTML=h;return;}
+  h+='<table class="sold-table"><thead><tr><th>书名</th><th>数量</th><th>买入</th><th>售出</th><th>利润</th><th></th></tr></thead><tbody>';
+  bks.forEach(function(b){
+    h+='<tr><td>'+esc(b.title)+'</td><td>'+(b.qty||1)+'</td><td>'+fmt(b.pp)+'</td><td>'+fmt(b.sp)+'</td><td class="'+(b.profit>=0?'profit':'loss')+'">'+(b.profit>=0?'+':'')+fmt(b.profit)+'</td><td><button onclick="event.stopPropagation();confirmDelSold(\''+b.id+'\')" style="background:none;border:none;color:#E87A7A;cursor:pointer;font-size:11px;font-weight:700">&#128465;</button></td></tr>';
+  });
+  h+='</tbody></table>'; el.innerHTML=h;
+}
+function confirmDelSold(id){openModal('<h2>确认删除</h2><p>确定要删除这条售出记录吗？</p><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-red" onclick="delSold(\''+id+'\')">确认删除</button></div>');}
+function delSold(id){D.soldBooks=D.soldBooks.filter(function(x){return x.id!==id;});sv();closeModal();renderList();}
+
+function openModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modalOverlay').classList.add('open');}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+ld();renderList();
+</script></body></html>
+
+
+
+
+

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>柜子管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--canvas:#FFF9F8;--canvas-soft:#FFF2EE;--ink:#4A3A3E;--body:#6B5A5E;--body-mid:#9A8A8E;--mute:#E8D5D0;--primary:#FF9CB5;--primary-dark:#E87A95;--on-primary:#FFFEFB;--radius-sm:10px;--radius-md:18px;--radius-pill:9999px;--font:"Quicksand","Nunito",sans-serif;--font-heading:"Bricolage Grotesque","Nunito",sans-serif;--shadow:0 4px 16px rgba(255,156,181,.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#FFF5F2}
+body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--canvas);position:relative;overflow:hidden}
+.app-blob{position:absolute;border-radius:9999px;pointer-events:none;z-index:0}
+.app-blob.b1{width:280px;height:280px;top:-80px;right:-60px;background:#FFD1DC;opacity:.35;filter:blur(80px)}
+.app-blob.b2{width:320px;height:320px;bottom:-100px;left:-80px;background:#FCD5CE;opacity:.25;filter:blur(90px)}
+.page-header{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:4px 16px 10px}
+.page-header .back-btn{width:34px;height:34px;border-radius:50%;background:var(--canvas-soft);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--body);font-weight:700;transition:background .15s;flex-shrink:0}
+.page-header .back-btn:active{background:var(--mute)}
+.page-header h1{font-size:20px;font-weight:700;color:var(--primary-dark);font-family:var(--font-heading)}
+.page-header .add-btn,.detail-header .add-btn{margin-left:auto;background:none;border:none;color:var(--primary-dark);font-size:24px;font-weight:700;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.page-header .add-btn:active,.detail-header .add-btn:active{background:var(--canvas-soft)}
+.content{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 16px 8px;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--mute);border-radius:4px}
+.cabinet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.cabinet-card{background:var(--canvas);border-radius:var(--radius-md);overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:var(--shadow);border:1.5px solid rgba(255,156,181,.1);position:relative}
+.cabinet-card:active{transform:scale(.96)}
+.cabinet-card-cover{height:100px;background:var(--mute);overflow:hidden}
+.cabinet-card-cover img{width:100%;height:100%;object-fit:cover}
+
+.cabinet-card-body{padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.cabinet-card-body h3{font-size:14px;font-weight:600;color:var(--ink)}
+.cabinet-card-body .badge{font-size:10px;color:var(--body-mid);font-weight:600;background:var(--canvas-soft);padding:2px 8px;border-radius:var(--radius-pill)}
+.cabinet-card-del{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.85);border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#E87A7A;opacity:0;transition:opacity .12s}
+.cabinet-card:hover .cabinet-card-del{opacity:1}.cabinet-card-camera{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.45);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .12s}.cabinet-card:hover .cabinet-card-camera,.cabinet-card-camera:hover{opacity:1}
+
+
+.detail-header h2{font-size:20px;font-weight:700;color:var(--primary-dark);font-family:var(--font-heading)}
+.add-cat-row{display:flex;gap:8px;margin-bottom:12px}
+.add-cat-row input{flex:1;padding:10px 12px;border:2px solid var(--mute);border-radius:var(--radius-sm);font-size:13px;outline:none;background:var(--canvas);font-family:inherit;font-weight:600}
+.add-cat-row input:focus{border-color:var(--primary)}.add-cat-row .cat-add-btn{background:var(--primary);color:var(--on-primary);border:none;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .12s}.add-cat-row .cat-add-btn:active{transform:scale(.96)}
+.category-list{margin-top:4px}
+.category-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--canvas);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:background .12s;border:1.5px solid rgba(255,156,181,.08);box-shadow:0 2px 6px rgba(0,0,0,.02)}
+.category-item:active{background:var(--canvas-soft)}
+.category-item .cat-name{font-size:13px;color:var(--ink);font-weight:600;display:flex;align-items:center;gap:6px}
+.category-item .cat-count{font-size:11px;color:var(--body-mid);font-weight:600}
+.category-item .cat-actions{display:flex;gap:4px}
+.category-item .cat-actions button{background:none;border:none;font-size:12px;color:var(--body-mid);cursor:pointer;padding:4px 6px;border-radius:var(--radius-sm);font-weight:600}
+.category-item .cat-actions button:active{background:var(--mute);color:var(--ink)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--body-mid);font-size:14px}
+.empty-state .empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.tab-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);background:var(--canvas);border-top:1.5px solid var(--canvas-soft);flex-shrink:0}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;border:none;background:none;cursor:pointer;font-family:inherit;transition:opacity .12s;position:relative}
+.tab-item:active{opacity:.6}
+.tab-item .tab-icon{font-size:20px;line-height:1;font-weight:600;color:var(--body-mid);transition:color .15s;font-family:var(--font-heading)}
+.tab-item .tab-label{font-size:10px;color:var(--body-mid);font-weight:600;transition:color .15s}
+.tab-item.active .tab-icon{color:var(--primary-dark)}
+.tab-item.active .tab-label{color:var(--primary-dark)}
+.tab-item .tab-active-face{position:absolute;top:-14px;font-size:8px;color:var(--primary);opacity:0;transition:opacity .15s;pointer-events:none}
+.tab-item.active .tab-active-face{opacity:.6}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(74,58,62,.35);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--canvas);border-radius:var(--radius-md);padding:20px;max-width:380px;width:100%;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px;font-family:var(--font-heading)}
+.modal p{font-size:13px;color:var(--body);margin-bottom:12px}
+.form-group{margin-bottom:10px}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.form-group input{width:100%;padding:10px 12px;border:2px solid var(--mute);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--canvas);font-family:inherit;font-weight:600;transition:border .12s}
+.form-group input:focus{border-color:var(--primary)}
+.modal-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:14px}
+.modal-actions .btn-text{background:none;color:var(--body);padding:8px 14px;font-weight:600;border-radius:var(--radius-md);cursor:pointer;border:none;font-family:inherit;font-size:13px}
+.modal-actions .btn-text:active{background:var(--canvas-soft)}
+.modal-actions .btn-pink{background:var(--primary);color:var(--on-primary);padding:8px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;box-shadow:0 4px 12px rgba(255,156,181,.25)}
+.modal-actions .btn-pink:active{transform:scale(.96)}
+.modal-actions .btn-red{background:#E87A7A;color:white;padding:8px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;box-shadow:0 4px 12px rgba(232,122,122,.25)}
+.modal-actions .btn-red:active{transform:scale(.96)}
+@media(min-width:768px){.app{border-radius:28px;margin:20px auto;height:calc(100dvh - 40px);box-shadow:0 0 40px rgba(0,0,0,.06)}}
+</style></head><body>
+<div class="app"><div class="app-blob b1"></div><div class="app-blob b2"></div>
+<div class="page-header" id="pageHeader"><h1>柜子管理</h1><button class="add-btn" onclick="addCabinet()" title="添加柜子">+</button></div>
+<div class="content" id="content" style="flex:1;overflow-y:auto;min-height:0">
+<div id="pageList"></div>
+<div id="pageDetail" style="display:none">
+<div class="detail-header"><button class="back-btn" onclick="goToCabinetList()" style="width:34px;height:34px;border-radius:50%;background:var(--canvas-soft);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--body);font-weight:700;transition:background .15s;flex-shrink:0">&#8592;</button><div style="flex:1"><h2 id="cabDetailName"></h2></div></div>
+<div class="add-cat-row"><input type="text" id="bookSearch" placeholder="搜索书籍..." onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='fig-untitled-2.html?cabinet='+encodeURIComponent(curCabId)+'&q='+encodeURIComponent(this.value.trim())" style="flex:1;padding:10px 12px;border:2px solid var(--mute);border-radius:var(--radius-sm);font-size:13px;outline:none;background:var(--canvas);font-family:inherit;font-weight:600"><button id="addCatBtn" type="button" onclick="addCategory()" style="display:inline-flex;align-items:center;padding:8px 16px;background:var(--primary);color:var(--on-primary);border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap">+ 添加分类</button></div>
+<div id="categoryList" class="category-list"></div></div></div>
+<nav class="tab-bar">
+<button class="tab-item" onclick="window.location.href='fig-untitled.html'"><span class="tab-icon"><img src="assets/emoji/crop_16.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">主页</span></button>
+<button class="tab-item active" onclick="window.location.href='fig-untitled-1.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_18.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">柜子</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-4.html'"><span class="tab-icon"><img src="assets/emoji/crop_19.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">已售</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-icon"><img src="assets/emoji/crop_20.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+<script>var D={cabinets:[],books:[],soldBooks:[]};
+function sv(){var cab=D.cabinets.map(function(x){return{id:x.id,name:x.name,ci:x.ci||'',cats:(x.cats||[]).map(function(c){return{id:c.id,name:c.name}})}});try{localStorage.setItem('z2_cabs',JSON.stringify(cab));}catch(e){}}
+function ld(){var v=localStorage.getItem("z2_ver");if(v!=="v15"||!D.cabinets[0]||!D.cabinets[0].ci){localStorage.clear();localStorage.setItem("z2_ver","v15");}try{D.cabinets=JSON.parse(localStorage.getItem("z2_cabs"))||[];}catch(e){}if(D.cabinets.length===0)initDemoData();}function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function findCab(id){for(var i=0;i<D.cabinets.length;i++){if(D.cabinets[i].id===id)return D.cabinets[i];}return null;}
+function processImg(file,cb){var r=new FileReader();r.onload=function(e){var img=new Image();img.onload=function(){var c=document.createElement('canvas'),w=img.width,h=img.height,md=400;if(w>md||h>md){var ra=Math.min(md/w,md/h);w=Math.round(w*ra);h=Math.round(h*ra)}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',.7));};img.src=e.target.result;};r.readAsDataURL(file);}
+function changeCover(id){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){if(!this.files[0])return;processImg(this.files[0],function(du){var cab=findCab(id);if(cab){cab.ci=du;sv();renderCabinetList();}});};inp.click();}
+function initDemoData(){
+D.cabinets=[
+ {id:"c1",name:"柜子1",ci:"fig1_39d387156929.jpg",cats:[
+  {id:"ct1_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c2",name:"柜子2",ci:"fig1_ceb2e801f2c6.jpg",cats:[
+  {id:"ct2_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c3",name:"柜子3",ci:"fig1_790340836825.jpg",cats:[
+  {id:"ct3_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c4",name:"柜子4",ci:"fig1_5952cc54edb4.jpg",cats:[
+  {id:"ct4_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c5",name:"柜子5",ci:"fig2_35d7bad9f1b0.jpg",cats:[
+  {id:"ct5_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c6",name:"柜子6",ci:"fig2_5952cc54edb4.jpg",cats:[
+  {id:"ct6_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c7",name:"柜子7",ci:"fig3_a731c4eb0653.jpg",cats:[
+  {id:"ct7_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c8",name:"柜子8",ci:"fig3_ad0a4d4c73ee.jpg",cats:[
+  {id:"ct8_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c9",name:"柜子9",ci:"fig4_047d7940f8b2.jpg",cats:[
+  {id:"ct9_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c10",name:"柜子10",ci:"fig4_17ab3b83f2ab.jpg",cats:[
+  {id:"ct10_self",name:"周佳欣自己改"}
+ ]},
+ {id:"c11",name:"柜子11",ci:"fig4_2fd8ea7b75b1.jpg",cats:[
+  {id:"ct11_self",name:"周佳欣自己改"}
+ ]},
+];sv();localStorage.setItem('z2_ver','v15');}
+function renderCabinetList(){var el=document.getElementById("pageList");if(D.cabinets.length===0){el.innerHTML='<div class="empty-state"><div class="empty-icon">&#128193;</div><p>还没有柜子</p></div>';return;}var h='<div class="cabinet-grid">';D.cabinets.forEach(function(cab){var nc=(cab.cats||[]).length;var cover=cab.ci?(cab.ci.indexOf('data:')===0?cab.ci:'assets/'+cab.ci):'';h+='<div class="cabinet-card" onclick="showCabinet(\''+cab.id+'\')"><div class="cabinet-card-cover">'+(cover?'<img src="'+cover+'" alt="">':'')+'<button class="cabinet-card-camera" onclick="event.stopPropagation();changeCover(\''+cab.id+'\')" title="更换封面"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="13" cy="13" r="4"/></svg></button></div><button class="cabinet-card-del" onclick="event.stopPropagation();confirmDelCabinet(\''+cab.id+'\')">&#10005;</button><div class="cabinet-card-body"><h3>'+esc(cab.name)+'</h3><span class="badge">'+nc+' 分类</span></div></div>';});h+='</div>';el.innerHTML=h;}
+var curCabId=null;
+function addCategory(){openModal('<h2>添加分类</h2><div class="form-group"><label>分类名称</label><input type="text" id="mCatName" placeholder="输入分类名称"></div><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-pink" onclick="saveCategory()">保存</button></div>');setTimeout(function(){var inp=document.getElementById('mCatName');if(inp)inp.focus();},100);}
+function saveCategory(){var n=document.getElementById('mCatName').value.trim();if(!n)return;var c=findCab(curCabId);if(!c)return;if(!c.cats)c.cats=[];c.cats.push({id:uid(),name:n});sv();closeModal();renderCategories(c);}
+function showCabinet(id){curCabId=id;var cab=findCab(id);if(!cab)return;document.getElementById('pageHeader').style.display='none';document.getElementById('pageList').style.display='none';document.getElementById('pageDetail').style.display='block';document.getElementById('cabDetailName').textContent=cab.name;renderCategories(cab);}
+function renderCategories(cab){var el=document.getElementById('categoryList');var cats=cab.cats||[];if(cats.length===0){el.innerHTML='<div class="empty-state" style="padding:20px"><p>还没有分类</p></div>';return;}var h='';cats.forEach(function(cat){h+='<div class="category-item" onclick="window.location.href=\'fig-untitled-2.html?cabinet='+cab.id+'&category='+cat.id+'\'"><span class="cat-name">'+esc(cat.name)+'</span><span class="cat-actions"><button onclick="event.stopPropagation();editCategory(\''+cat.id+'\')">&#9998;</button><button onclick="event.stopPropagation();confirmDelCategory(\''+cat.id+'\')">&#128465;</button></span></div>';});el.innerHTML=h;}
+function goToCabinetList(){curCabId=null;document.getElementById('pageHeader').style.display='';document.getElementById('pageList').style.display='';document.getElementById('pageDetail').style.display='none';renderCabinetList();}
+function addCabinet(){openModal('<h2>添加柜子</h2><div class="form-group"><label>名称</label><input type="text" id="mCabName" placeholder="柜子名称"></div><div class="form-group"><label>封面图片</label><input type="file" id="mCabCv" accept="image/*"></div><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-pink" onclick="saveCabinet()">保存</button></div>');}
+function saveCabinet(){var n=document.getElementById('mCabName').value.trim();if(!n)return;var fi=document.getElementById('mCabCv');if(fi&&fi.files.length>0){processImg(fi.files[0],function(du){D.cabinets.push({id:uid(),name:n,ci:du,cats:[]});sv();closeModal();renderCabinetList();});}else{D.cabinets.push({id:uid(),name:n,ci:'',cats:[]});sv();closeModal();renderCabinetList();}}
+function editCabinet(){var cab=findCab(curCabId);if(!cab)return;openModal('<h2>编辑柜子</h2><div class="form-group"><label>名称</label><input type="text" id="mCabName" value="'+esc(cab.name)+'"></div><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-pink" onclick="updateCabinet()">保存</button></div>');}
+function updateCabinet(){var n=document.getElementById('mCabName').value.trim();if(!n)return;var cab=findCab(curCabId);if(cab){cab.name=n;sv();closeModal();showCabinet(curCabId);renderCabinetList();}}
+function confirmDelCabinet(id){var cab=findCab(id);if(!cab)return;openModal('<h2>确认删除</h2><p>柜子「'+esc(cab.name)+'」将被删除。</p><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-red" onclick="deleteCabinet(\''+id+'\')">确认</button></div>');}
+function deleteCabinet(id){D.cabinets=D.cabinets.filter(function(c){return c.id!==id;});sv();closeModal();goToCabinetList();}
+function editCategory(catId){var cat=null;for(var i=0;i<D.cabinets.length;i++){var cs=D.cabinets[i].cats||[];for(var j=0;j<cs.length;j++){if(cs[j].id===catId){cat=cs[j];break;}}}if(!cat)return;openModal('<h2>编辑分类</h2><div class="form-group"><label>名称</label><input type="text" id="mCatName" value="'+esc(cat.name)+'"></div><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-pink" onclick="updateCategory(\''+catId+'\')">保存</button></div>');}
+function updateCategory(catId){var n=document.getElementById('mCatName').value.trim();if(!n)return;for(var i=0;i<D.cabinets.length;i++){var cs=D.cabinets[i].cats||[];for(var j=0;j<cs.length;j++){if(cs[j].id===catId){cs[j].name=n;sv();closeModal();var cab=findCab(curCabId);if(cab)renderCategories(cab);return;}}}}
+function confirmDelCategory(catId){openModal('<h2>确认删除</h2><p>分类将连同下属图书被删除。</p><div class="modal-actions"><button class="btn-text" onclick="closeModal()">取消</button><button class="btn-red" onclick="deleteCategory(\''+catId+'\')">确认</button></div>');}
+function deleteCategory(catId){for(var i=0;i<D.cabinets.length;i++){var cs=D.cabinets[i].cats||[];for(var j=0;j<cs.length;j++){if(cs[j].id===catId){cs.splice(j,1);break;}}}sv();closeModal();var cab=findCab(curCabId);if(cab)renderCategories(cab);}
+function openModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modalOverlay').classList.add('open');}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+ld();renderCabinetList();
+</script>
+</body></html>

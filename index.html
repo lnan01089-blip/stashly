@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stashly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--font:"Quicksand","Nunito",sans-serif;--font-heading:"Bricolage Grotesque","Quicksand",sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--font);
+  background:linear-gradient(180deg,#FFF 0%,#FEF8F5 100%);
+  min-height:100vh;min-height:100dvh;
+  overflow-x:hidden;
+  display:flex;flex-direction:column;align-items:center
+}
+.page{
+  position:relative;
+  width:100%;max-width:390px;
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 16px;overflow:hidden
+}
+.blob{position:absolute;border-radius:9999px;pointer-events:none}
+.blob-pink{
+  width:384px;height:383px;top:-88px;left:-39px;
+  background:#FFD1DC;opacity:.6;mix-blend-mode:multiply;filter:blur(100px)
+}
+.blob-peach{
+  width:480px;height:479px;bottom:-200px;right:-100px;
+  background:#FCD5CE;opacity:.35;filter:blur(120px)
+}
+.blob-warm{
+  width:640px;height:638px;bottom:80px;left:-180px;
+  background:#F9DCC4;opacity:.25;filter:blur(90px)
+}
+.main{
+  position:relative;z-index:1;
+  width:100%;max-width:358px;
+  display:flex;flex-direction:column;align-items:center;gap:0
+}
+.header-section{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px}
+.heading{
+  font-family:"Bricolage Grotesque","Quicksand",sans-serif;
+  font-size:48px;font-weight:800;letter-spacing:-1.2px;
+  color:#78555E;text-align:center;line-height:1.1
+}
+.subtitle{
+  font-size:18px;font-weight:400;
+  color:#4F4446;text-align:center;line-height:1.6;
+  max-width:260px
+}
+.visual-card{
+  width:100%;max-width:340px;
+  border-radius:32px;overflow:hidden;margin-bottom:40px;
+  background:#FFF5F2;
+  box-shadow:0 0 30px rgba(231,187,202,.3),0 10px 30px -5px rgba(231,187,202,.4)
+}
+.visual-card-inner{border-radius:24px;overflow:hidden}
+.visual-card img{
+  display:block;
+  width:100%;height:auto;
+  aspect-ratio:340/251;
+  object-fit:cover
+}
+.action-section{display:flex;flex-direction:column;align-items:center;gap:24px}
+.cta-button{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:16px 32px;
+  background:#78555E;color:#fff;
+  font-family:var(--font);
+  font-size:14px;font-weight:600;letter-spacing:.14px;
+  border:none;border-radius:9999px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 10px 30px -5px rgba(231,187,202,.5);
+  text-decoration:none;line-height:1;white-space:nowrap
+}
+.cta-button:hover{transform:translateY(-2px);box-shadow:0 14px 40px -5px rgba(231,187,202,.6)}
+.welcome-text{
+  font-size:12px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:#817476
+}
+@media(min-width:640px){.page{max-width:480px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="blob blob-pink"></div>
+  <div class="blob blob-peach"></div>
+  <div class="blob blob-warm"></div>
+
+  <div class="main">
+    <div class="header-section">
+      <h1 class="heading">Z<span style="font-weight:300">&rsquo;</span>s Stashly</h1>
+      <p class="subtitle">Your Personal Library Curator</p>
+    </div>
+
+    <div class="visual-card">
+      <div class="visual-card-inner">
+        <img src="assets/index-image.png" alt="Library scene with Sakura and Chiikawa elements">
+      </div>
+    </div>
+
+    <div class="action-section">
+      <a href="fig-untitled.html" class="cta-button">进入书架</a>
+      <div class="welcome-text">WELCOME HOME</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>统计概览</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700<style>family=Bricolage+Grotesque:opsz,wght@12..96,800<style>family=Nunito:wght@400;600;700;800<style>display=swap" rel="stylesheet">
+<style>
+:root{--canvas:#FFF9F8;--canvas-soft:#FFF2EE;--ink:#4A3A3E;--body:#6B5A5E;--body-mid:#9A8A8E;--mute:#E8D5D0;--primary:#FF9CB5;--primary-dark:#E87A95;--on-primary:#FFFEFB;--radius-sm:10px;--radius-md:18px;--radius-pill:9999px;--font:"Quicksand","Nunito",sans-serif;--font-heading:"Bricolage Grotesque","Nunito",sans-serif;--shadow:0 4px 16px rgba(255,156,181,.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#FFF5F2}
+body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--canvas);position:relative;overflow:hidden}
+.app-blob{position:absolute;border-radius:9999px;pointer-events:none;z-index:0}
+.app-blob.b1{width:280px;height:280px;top:-80px;right:-60px;background:#FFD1DC;opacity:.35;filter:blur(80px)}
+.app-blob.b2{width:320px;height:320px;bottom:-100px;left:-80px;background:#FCD5CE;opacity:.25;filter:blur(90px)}
+.page-header{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:4px 16px 10px}
+.page-header .back-btn{width:34px;height:34px;border-radius:50%;background:var(--canvas-soft);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--body);font-weight:700;transition:background .15s;flex-shrink:0}
+.page-header .back-btn:active{background:var(--mute)}
+.page-header h1{font-size:20px;font-weight:800;color:var(--primary-dark);font-family:var(--font-heading)}
+.content{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 16px 8px;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--mute);border-radius:4px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:16px}
+.stat-card{background:var(--canvas);border-radius:var(--radius-md);padding:12px;text-align:center;box-shadow:var(--shadow);border:1.5px solid rgba(255,156,181,.1)}
+.stat-card .stat-label{font-size:10px;color:var(--body-mid);margin-bottom:2px;font-weight:700}
+.stat-card .stat-value{font-size:22px;font-weight:800;color:var(--ink);line-height:1.2;font-family:var(--font-heading)}
+.stat-card .stat-sub{font-size:9px;color:var(--body-mid);margin-top:2px;font-weight:600}
+.stat-card .stat-value.green{color:#2a9d8f}
+.charts-row{display:grid;grid-template-columns:1fr;gap:12px}
+.chart-card{background:var(--canvas);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow);border:1.5px solid rgba(255,156,181,.08)}
+.chart-card h3{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:10px;font-family:var(--font-heading)}
+.chart-card canvas{max-height:220px;max-width:100%}
+.tab-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);background:var(--canvas);border-top:1.5px solid var(--canvas-soft);flex-shrink:0}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;border:none;background:none;cursor:pointer;font-family:inherit;transition:opacity .12s;position:relative}
+.tab-item:active{opacity:.6}
+.tab-item .tab-icon{font-size:20px;line-height:1;font-weight:800;color:var(--body-mid);transition:color .15s}
+.tab-item .tab-label{font-size:10px;color:var(--body-mid);font-weight:700;transition:color .15s}
+.tab-item.active .tab-icon{color:var(--primary-dark)}
+.tab-item.active .tab-label{color:var(--primary-dark)}
+.tab-item .tab-active-face{position:absolute;top:-14px;font-size:8px;color:var(--primary);opacity:0;transition:opacity .15s;pointer-events:none}
+.tab-item.active .tab-active-face{opacity:.6}
+@media(min-width:481px){.app{border-radius:28px;margin:20px auto;height:calc(100dvh - 40px);box-shadow:0 0 40px rgba(0,0,0,.06)}}
+</style></head><body>
+<div class="app"><div class="app-blob b1"></div><div class="app-blob b2"></div>
+<div class="page-header"><h1>统计概览</h1></div>
+<div class="content" id="content"></div>
+<nav class="tab-bar">
+<button class="tab-item" onclick="window.location.href='fig-untitled.html'"><span class="tab-icon"><img src="assets/emoji/crop_16.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">主页</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-1.html'"><span class="tab-icon"><img src="assets/emoji/crop_18.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">柜子</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-4.html'"><span class="tab-icon"><img src="assets/emoji/crop_19.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">已售</span></button>
+<button class="tab-item active" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_20.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
+<script>
+var D={cabinets:[],books:[],soldBooks:[]};
+function ld(){try{D.cabinets=JSON.parse(localStorage.getItem('z2_cabs'))||[];}catch(e){}try{D.books=JSON.parse(localStorage.getItem('z2_books'))||[];}catch(e){}try{D.soldBooks=JSON.parse(localStorage.getItem('z2_sold'))||[];}catch(e){}}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(n){return(n==null||isNaN(n))?'0.00':Number(n).toFixed(2);}
+function render(){
+  ld();
+  var all=D.books.concat(D.soldBooks);
+  var t=all.reduce(function(s,b){return s+(b.qty||1);},0);
+  var a=D.books.filter(function(b){return b.status!=='sold';}).reduce(function(s,b){return s+(b.qty||1);},0);
+  var st=D.soldBooks.reduce(function(s,b){return s+(b.qty||1);},0);
+  var tc=all.reduce(function(s,b){return s+((b.pp||0)*(b.qty||1));},0);
+  var ts=D.soldBooks.reduce(function(s,b){return s+((b.sp||0)*(b.qty||1));},0);
+  var tp=D.soldBooks.reduce(function(s,b){return s+((b.profit||0)*(b.qty||1));},0);
+  var h='<div class="stats-grid">';
+  h+='<div class="stat-card"><div class="stat-label">总藏书</div><div class="stat-value">'+t+'</div></div>';
+  h+='<div class="stat-card"><div class="stat-label">在藏</div><div class="stat-value">'+a+'</div></div>';
+  h+='<div class="stat-card"><div class="stat-label">已售</div><div class="stat-value">'+st+'</div></div>';
+  h+='<div class="stat-card"><div class="stat-label">买入总额</div><div class="stat-value">'+Math.round(tc)+'</div></div>';
+  h+='<div class="stat-card"><div class="stat-label">售出总额</div><div class="stat-value">'+Math.round(ts)+'</div></div>';
+  h+='<div class="stat-card"><div class="stat-label">总利润</div><div class="stat-value '+(tp>=0?'green':'')+'">'+(tp>=0?'+':'')+Math.round(tp)+'</div></div>';
+  h+='</div>';
+  h+='<div class="charts-row"><div class="chart-card"><h3>分类分布</h3><canvas id="catChart"></canvas></div><div class="chart-card"><h3>柜子分布</h3><canvas id="cabChart"></canvas></div></div>';
+  document.getElementById('content').innerHTML=h;
+
+  var cm={};all.forEach(function(b){var ca=D.cabinets.find(function(c){return c.id===b.cabinetId;});var cat=ca&&ca.cats?ca.cats.find(function(c){return c.id===b.categoryId;}):null;var n=cat?cat.name:'Uncategorized';cm[n]=(cm[n]||0)+(b.qty||1);});
+  var cl=Object.keys(cm);
+  if(cl.length>0&&window.Chart){new Chart(document.getElementById('catChart'),{type:'doughnut',data:{labels:cl,datasets:[{data:cl.map(function(k){return cm[k];}),backgroundColor:cl.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:12,color:'#6B5A5E'}}}}});}
+
+  var cm2={};all.forEach(function(b){var ca=D.cabinets.find(function(c){return c.id===b.cabinetId;});var n=ca?ca.name:'Deleted';cm2[n]=(cm2[n]||0)+(b.qty||1);});
+  var cl2=Object.keys(cm2);
+  if(cl2.length>0&&window.Chart){new Chart(document.getElementById('cabChart'),{type:'bar',data:{labels:cl2,datasets:[{label:'Count',data:cl2.map(function(k){return cm2[k];}),backgroundColor:cl2.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderRadius:4,barThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#9A8A8E',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#6B5A5E',font:{size:11}}}}}});}
+}
+render();
+
+</script></body></html>
+
+
+
