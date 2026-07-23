@@ -51,7 +51,7 @@ body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-w
 <button class="tab-item active" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_20.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
 <script>
 var D={cabinets:[],books:[],soldBooks:[]};
-function ld(){try{D.cabinets=JSON.parse(localStorage.getItem('z2_cabs'))||[];}catch(e){}try{D.books=JSON.parse(localStorage.getItem('z2_books'))||[];}catch(e){}try{D.soldBooks=JSON.parse(localStorage.getItem('z2_sold'))||[];}catch(e){}}
+function ld(){if(localStorage.getItem('z2_ver')!=='v15'){localStorage.clear();}try{D.cabinets=JSON.parse(localStorage.getItem('z2_cabs'))||[];}catch(e){}try{D.books=JSON.parse(localStorage.getItem('z2_books'))||[];}catch(e){}try{D.soldBooks=JSON.parse(localStorage.getItem('z2_sold'))||[];}catch(e){}}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(n){return(n==null||isNaN(n))?'0.00':Number(n).toFixed(2);}
 function render(){
@@ -82,7 +82,7 @@ function render(){
   var cl2=Object.keys(cm2);
   if(cl2.length>0&&window.Chart){new Chart(document.getElementById('cabChart'),{type:'bar',data:{labels:cl2,datasets:[{label:'Count',data:cl2.map(function(k){return cm2[k];}),backgroundColor:cl2.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderRadius:4,barThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#9A8A8E',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#6B5A5E',font:{size:11}}}}}});}
 }
-render();
+ld();if(D.cabinets.length===0){window.location.href='fig-untitled.html';}else{render();}
 
 </script></body></html>
 
