@@ -1,4 +1,4 @@
-const CACHE = 'stashly-v2';
+const CACHE = 'stashly-v3';
 const FILES = [
   '/',
   '/index.html',
