@@ -117,7 +117,7 @@ function render(){
   var totalBooks=all.reduce(function(s,b){return s+(b.qty||1);},0);
   var totalCabs=D.cabinets.length;
   var profit=D.soldBooks.reduce(function(s,b){return s+((b.profit||0)*(b.qty||1));},0);
-  var h='<div style="text-align:center;padding:8px 0 12px"><img src="assets/cover-small.jpg" style="max-width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.08)"></div><div class="stats-row">'+
+  var h='<div style="text-align:center;padding:8px 0 12px;position:relative" onclick="var i=document.createElement(\"input\");i.type=\"file\";i.accept=\"image/*\";i.onchange=function(){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){var img=new Image();img.onload=function(){var c=document.createElement(\"canvas\");var s=600;var ra=Math.min(s/img.width,s/img.height);c.width=img.width*ra;c.height=img.height*ra;c.getContext(\"2d\").drawImage(img,0,0,c.width,c.height);var u=c.toDataURL(\"image/jpeg\",.8);document.getElementById(\"homeCover\").src=u;try{localStorage.setItem(\"home_cover\",u)}catch(e){}};img.src=e.target.result};r.readAsDataURL(f)};i.click()"><img id="homeCover" src="" style="max-width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.08);cursor:pointer"></div><div class="stats-row">'+
     '<div class="stat-card"><div class="stat-label">总藏书</div><div class="stat-value">'+totalBooks+'</div></div>'+
     '<div class="stat-card"><div class="stat-label">柜子</div><div class="stat-value">'+totalCabs+'</div></div>'+
     '<div class="stat-card"><div class="stat-label">利润</div><div class="stat-value">'+(profit>=0?'+':'')+Math.round(profit)+'</div></div></div>';
@@ -136,6 +136,7 @@ function render(){
     recent.forEach(function(b){h+='<div class="recent-book" onclick="window.location.href=\'fig-untitled-2.html\'"><div class="cover">'+(b.ci?'<img src="'+imgSrc(b.ci)+'" alt="">':'')+'</div><div class="b-title">'+esc(b.title)+'</div><div class="b-meta">'+((b.pp||0).toFixed(2))+'</div></div>';});
     h+='</div>';}
   document.getElementById('homeContent').innerHTML=h;
+	var cv=document.getElementById("homeCover");if(cv){cv.src=localStorage.getItem("home_cover")||"assets/cover-small.jpg";}
 }
 document.getElementById('avatarInput').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){document.getElementById('avatarImg').src=ev.target.result;try{localStorage.setItem('z_avatar',ev.target.result)}catch(e){}};r.readAsDataURL(f);});
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
