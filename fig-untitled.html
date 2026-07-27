@@ -117,7 +117,7 @@ function render(){
   var totalBooks=all.reduce(function(s,b){return s+(b.qty||1);},0);
   var totalCabs=D.cabinets.length;
   var profit=D.soldBooks.reduce(function(s,b){return s+((b.profit||0)*(b.qty||1));},0);
-  var h='<div class="stats-row">'+
+  var h='<div style="text-align:center;padding:8px 0 12px"><img src="assets/cover-small.jpg" style="max-width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.08)"></div><div class="stats-row">'+
     '<div class="stat-card"><div class="stat-label">总藏书</div><div class="stat-value">'+totalBooks+'</div></div>'+
     '<div class="stat-card"><div class="stat-label">柜子</div><div class="stat-value">'+totalCabs+'</div></div>'+
     '<div class="stat-card"><div class="stat-label">利润</div><div class="stat-value">'+(profit>=0?'+':'')+Math.round(profit)+'</div></div></div>';
