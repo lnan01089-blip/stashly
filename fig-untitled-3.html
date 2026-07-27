@@ -7,9 +7,9 @@
 <style>
 :root{--canvas:#FFF9F8;--canvas-soft:#FFF2EE;--ink:#4A3A3E;--body:#6B5A5E;--body-mid:#9A8A8E;--mute:#E8D5D0;--primary:#FF9CB5;--primary-dark:#E87A95;--on-primary:#FFFEFB;--radius-sm:10px;--radius-md:18px;--radius-pill:9999px;--font:"Quicksand","Nunito",sans-serif;--font-heading:"Bricolage Grotesque","Nunito",sans-serif;--shadow:0 4px 16px rgba(255,156,181,.15)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#FFF5F2}
+html,body{height:100dvh;background:#FFF5F2}
 body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden}
-.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--canvas);position:relative;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto;background:var(--canvas);position:relative;overflow:hidden}
 .app-blob{position:absolute;border-radius:9999px;pointer-events:none;z-index:0}
 .app-blob.b1{width:280px;height:280px;top:-80px;right:-60px;background:#FFD1DC;opacity:.35;filter:blur(80px)}
 .app-blob.b2{width:320px;height:320px;bottom:-100px;left:-80px;background:#FCD5CE;opacity:.25;filter:blur(90px)}
@@ -30,7 +30,7 @@ body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-w
 .chart-card{background:var(--canvas);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow);border:1.5px solid rgba(255,156,181,.08)}
 .chart-card h3{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:10px;font-family:var(--font-heading)}
 .chart-card canvas{max-height:220px;max-width:100%}
-.tab-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);background:var(--canvas);border-top:1.5px solid var(--canvas-soft);flex-shrink:0}
+.tab-bar{position:sticky;bottom:0;z-index:1;display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);background:var(--canvas);border-top:1.5px solid var(--canvas-soft);flex-shrink:0}
 .tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;border:none;background:none;cursor:pointer;font-family:inherit;transition:opacity .12s;position:relative}
 .tab-item:active{opacity:.6}
 .tab-item .tab-icon{font-size:20px;line-height:1;font-weight:800;color:var(--body-mid);transition:color .15s}
