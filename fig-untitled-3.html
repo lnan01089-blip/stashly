@@ -80,7 +80,7 @@ function render(){
 
   var cm2={};all.forEach(function(b){var ca=D.cabinets.find(function(c){return c.id===b.cabinetId;});var n=ca?ca.name:'Deleted';cm2[n]=(cm2[n]||0)+(b.qty||1);});
   var cl2=Object.keys(cm2);
-  if(cl2.length>0&&window.Chart){new Chart(document.getElementById('cabChart'),{type:'bar',data:{labels:cl2,datasets:[{label:'Count',data:cl2.map(function(k){return cm2[k];}),backgroundColor:cl2.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderRadius:4,barThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#9A8A8E',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#6B5A5E',font:{size:11}}}}}});}
+  if(cl2.length>0&&window.Chart){new Chart(document.getElementById('cabChart'),{type:'bar',data:{labels:cl2,datasets:[{label:'Count',data:cl2.map(function(k){return cm2[k];}),backgroundColor:cl2.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderRadius:4,barPercentage:0.6,categoryPercentage:0.8}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#9A8A8E',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#6B5A5E',font:{size:11}}}}}});}
 }
 ld();if(D.cabinets.length===0){window.location.href='fig-untitled.html';}else{render();}
 
