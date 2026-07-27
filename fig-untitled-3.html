@@ -35,7 +35,7 @@ body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-w
 .tab-item .tab-icon{font-size:20px;line-height:1;font-weight:800;color:var(--body-mid);transition:color .15s}
 .tab-item .tab-label{font-size:10px;color:var(--body-mid);font-weight:700;transition:color .15s}
 .tab-item.active .tab-icon{color:var(--primary-dark)}
-.tab-item.active .tab-icon img{transform:scale(1.4);transition:transform .2s}.tab-item .tab-icon img{transition:transform .2s}.tab-item.active .tab-label{color:var(--primary-dark)}
+.tab-item.active .tab-icon img{transform:scale(2);transition:transform .2s}.tab-item .tab-icon img{transition:transform .2s}.tab-item.active .tab-label{color:var(--primary-dark)}
 .tab-item .tab-active-face{position:absolute;top:-14px;font-size:8px;color:var(--primary);opacity:0;transition:opacity .15s;pointer-events:none}
 .tab-item.active .tab-active-face{opacity:.6}
 @media(min-width:481px){.app{border-radius:28px;margin:20px auto;height:calc(100dvh - 40px);box-shadow:0 0 40px rgba(0,0,0,.06)}}
@@ -44,10 +44,10 @@ body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-w
 <div class="page-header"><h1>统计概览</h1></div>
 <div class="content" id="content"></div>
 <nav class="tab-bar">
-<button class="tab-item" onclick="window.location.href='fig-untitled.html'"><span class="tab-icon"><img src="assets/emoji/crop_16.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">主页</span></button>
-<button class="tab-item" onclick="window.location.href='fig-untitled-1.html'"><span class="tab-icon"><img src="assets/emoji/crop_18.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">柜子</span></button>
-<button class="tab-item" onclick="window.location.href='fig-untitled-4.html'"><span class="tab-icon"><img src="assets/emoji/crop_19.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">已售</span></button>
-<button class="tab-item active" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_20.png" style="width:20px;height:20px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
+<button class="tab-item" onclick="window.location.href='fig-untitled.html'"><span class="tab-icon"><img src="assets/emoji/crop_16.png" style="width:26px;height:26px;object-fit:contain;display:block"></span><span class="tab-label">主页</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-1.html'"><span class="tab-icon"><img src="assets/emoji/crop_18.png" style="width:26px;height:26px;object-fit:contain;display:block"></span><span class="tab-label">柜子</span></button>
+<button class="tab-item" onclick="window.location.href='fig-untitled-4.html'"><span class="tab-icon"><img src="assets/emoji/crop_19.png" style="width:26px;height:26px;object-fit:contain;display:block"></span><span class="tab-label">已售</span></button>
+<button class="tab-item active" onclick="window.location.href='fig-untitled-3.html'"><span class="tab-active-face">(&#9685;&#8255;&#9685;)</span><span class="tab-icon"><img src="assets/emoji/crop_7.png" style="width:26px;height:26px;object-fit:contain;display:block"></span><span class="tab-label">统计</span></button></nav></div>
 <script>
 var D={cabinets:[],books:[],soldBooks:[]};
 function ld(){if(localStorage.getItem('z2_ver')!=='v15'){localStorage.clear();}try{D.cabinets=JSON.parse(localStorage.getItem('z2_cabs'))||[];}catch(e){}try{D.books=JSON.parse(localStorage.getItem('z2_books'))||[];}catch(e){}try{D.soldBooks=JSON.parse(localStorage.getItem('z2_sold'))||[];}catch(e){}}
