@@ -11,17 +11,24 @@
 <link rel="manifest" href="manifest.json">
 <title>Stashly</title>
 <style>
-body{margin:0;background:#FFF9F8;display:flex;align-items:center;justify-content:center;height:100dvh;font-family:-apple-system,sans-serif}
-.loader{text-align:center;color:#E87A95}
-.loader h2{font-size:24px;margin:0}
-.loader p{font-size:13px;opacity:.6;margin:8px 0 0}
+body{margin:0;background:linear-gradient(180deg,#FFF 0%,#FEF8F5 100%);display:flex;align-items:center;justify-content:center;min-height:100dvh;font-family:-apple-system,sans-serif}
+.page{text-align:center;padding:40px 20px;max-width:340px}
+.cover{width:100%;border-radius:24px;box-shadow:0 10px 30px rgba(231,187,202,.3);margin-bottom:32px}
+.cover img{width:100%;display:block;border-radius:24px}
+h1{color:#78555E;font-size:28px;margin:0 0 4px}
+.sub{color:#4F4446;font-size:14px;margin:0 0 28px}
+.btn{display:inline-block;padding:14px 40px;background:#78555E;color:#fff;border-radius:99px;text-decoration:none;font-size:15px;font-weight:600;box-shadow:0 8px 24px rgba(120,85,94,.3)}
 </style>
 <script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}
-setTimeout(function(){window.location.replace('fig-untitled.html')},100)
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
 </script>
 </head>
 <body>
-<div class="loader"><h2>Stashly</h2><p>loading...</p></div>
+<div class="page">
+<div class="cover"><img src="assets/index-image.png" alt="Stashly"></div>
+<h1>Z's Stashly</h1>
+<p class="sub">Your Personal Library</p>
+<a href="fig-untitled.html" class="btn">进入书架</a>
+</div>
 </body>
 </html>
