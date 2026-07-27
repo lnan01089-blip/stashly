@@ -1,0 +1,24 @@
+{
+  "name": "fig-html",
+  "version": "1.0.0",
+  "description": "",
+  "main": "books.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lnan01089-blip/stashly.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lnan01089-blip/stashly/issues"
+  },
+  "homepage": "https://github.com/lnan01089-blip/stashly#readme",
+  "dependencies": {
+    "sharp": "^0.35.3"
+  }
+}
