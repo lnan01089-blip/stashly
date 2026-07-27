@@ -40,7 +40,7 @@ body{font-family:var(--font);font-size:16px;line-height:1.5;color:var(--body);-w
 .tab-item .tab-active-face{position:absolute;top:-14px;font-size:8px;color:var(--primary);opacity:0;transition:opacity .15s;pointer-events:none}
 .tab-item.active .tab-active-face{opacity:.6}
 @media(min-width:481px){.app{border-radius:28px;margin:20px auto;height:calc(100dvh - 40px);box-shadow:0 0 40px rgba(0,0,0,.06)}}
-</style></head><body>
+</style></head><body><script src="books.js"></script>
 <div class="app"><div class="app-blob b1"></div><div class="app-blob b2"></div>
 <div class="page-header"><h1>统计概览</h1></div>
 <div class="content" id="content"></div>
@@ -82,7 +82,7 @@ var st=D.soldBooks.length;
   var cl2=Object.keys(cm2);
   if(cl2.length>0&&window.Chart){new Chart(document.getElementById('cabChart'),{type:'bar',data:{labels:cl2,datasets:[{label:'Count',data:cl2.map(function(k){return cm2[k];}),backgroundColor:cl2.map(function(_,i){return 'hsl('+((i*40)%360+340)+',55%,'+(65-i*5)+'%)';}),borderRadius:4,barPercentage:0.6,categoryPercentage:0.8}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#9A8A8E',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#6B5A5E',font:{size:11}}}}}});}
 }
-ld();if(D.cabinets.length===0){window.location.href='fig-untitled.html';}else{render();}
+ld();if(D.cabinets.length===0){var di=[{id:"c1",name:"柜子1",ci:"fig1_39d387156929.jpg",cats:[{id:"ct1_self",name:"周佳欣自己改"}]},{id:"c2",name:"柜子2",ci:"fig1_ceb2e801f2c6.jpg",cats:[{id:"ct2_self",name:"周佳欣自己改"}]},{id:"c3",name:"柜子3",ci:"fig1_790340836825.jpg",cats:[{id:"ct3_self",name:"周佳欣自己改"}]},{id:"c4",name:"柜子4",ci:"fig1_5952cc54edb4.jpg",cats:[{id:"ct4_self",name:"周佳欣自己改"}]},{id:"c5",name:"柜子5",ci:"fig2_35d7bad9f1b0.jpg",cats:[{id:"ct5_self",name:"周佳欣自己改"}]},{id:"c6",name:"柜子6",ci:"fig2_5952cc54edb4.jpg",cats:[{id:"ct6_self",name:"周佳欣自己改"}]},{id:"c7",name:"柜子7",ci:"fig3_a731c4eb0653.jpg",cats:[{id:"ct7_self",name:"周佳欣自己改"}]},{id:"c8",name:"柜子8",ci:"fig3_ad0a4d4c73ee.jpg",cats:[{id:"ct8_self",name:"周佳欣自己改"}]},{id:"c9",name:"柜子9",ci:"fig4_047d7940f8b2.jpg",cats:[{id:"ct9_self",name:"周佳欣自己改"}]},{id:"c10",name:"柜子10",ci:"fig4_17ab3b83f2ab.jpg",cats:[{id:"ct10_self",name:"周佳欣自己改"}]},{id:"c11",name:"柜子11",ci:"fig4_2fd8ea7b75b1.jpg",cats:[{id:"ct11_self",name:"周佳欣自己改"}]}];try{localStorage.setItem("z2_cabs",JSON.stringify(di));localStorage.setItem("z2_ver","v15");}catch(e){}D.cabinets=di}if(D.books.length===0){var items=typeof BOOKS_DATA!="undefined"?BOOKS_DATA:[];for(var i=0;i<items.length;i++){var o=items[i];D.books.push({id:"b"+i,cabinetId:o.cabinetId,categoryId:o.categoryId,title:o.title,author:o.author,edition:o.edition,merch:o.merch,qty:o.qty,pp:o.pp,ci:"",status:"active",createdAt:Date.now()})}try{localStorage.setItem("z2_books",JSON.stringify(D.books));localStorage.setItem("z2_ver","v15")}catch(e){}}render()
 
 </script></body></html>
 
